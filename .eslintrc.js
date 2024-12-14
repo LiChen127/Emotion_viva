@@ -26,5 +26,7 @@ module.exports = {
     'no-useless-escape': 'off',
     semi: 'warn',
     'prettier/prettier': 'warn',
+    // 允许使用 async/await
+    'no-async-promise-executor': 'off',
   },
 };

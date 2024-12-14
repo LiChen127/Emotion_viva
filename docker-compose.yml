@@ -1,24 +1,38 @@
-version: '3.8'
+version: '3'
 
 services:
+  # NestJS Service
   backend:
     build: .
-    container_name: emotion_viva_backend
+    container_name: backend
     ports:
       - '3000:3000'
     depends_on:
+      - db
       - redis
       - rabbitmq
 
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 121314
+      MYSQL_DATABASE: emotion_viva
+    ports:
+      - '3306:3306'
+
+  # Redis
   redis:
     image: redis:alpine
-    container_name: emotion_viva_redis
+    container_name: redis
     ports:
       - '6379:6379'
 
+  # RabbitMQ
   rabbitmq:
-    image: 'rabbitmq:management'
-    container_name: emotion_viva_rabbitmq
+    image: rabbitmq:management
+    container_name: rabbitmq
     ports:
       - '5672:5672'
-      - '15672:15672' # RabbitMQ management UI
+      - '15672:15672'
