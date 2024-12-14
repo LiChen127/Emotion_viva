@@ -2,10 +2,11 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CustomLoggerService } from './logger/logger.service';
-import { DatabaseModule } from './db/db.module';
+import { DatabaseModule } from './mysql/mysql.module';
 import { RedisModule } from './redis/redis.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { MongoDBModule } from './app/mongodb/mongodb.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         },
       },
     ]),
+    MongoDBModule,
   ],
   controllers: [AppController],
   providers: [AppService, CustomLoggerService],

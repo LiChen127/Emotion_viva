@@ -3,6 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/User.entity';
 import { UserProfile } from './entities/UserProfile.entity';
 import { DataSource } from 'typeorm';
+import { RecommendationRules } from './entities/Recommendation_rules.entity';
+import { ScheduledTasks } from './entities/Scheduled_tasks.entity';
+import { ActionsLogs } from './entities/Actions_logs.enity';
 
 @Module({
   imports: [
@@ -13,10 +16,22 @@ import { DataSource } from 'typeorm';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [User, UserProfile],
+      entities: [
+        User,
+        UserProfile,
+        RecommendationRules,
+        ScheduledTasks,
+        ActionsLogs,
+      ],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, UserProfile]),
+    TypeOrmModule.forFeature([
+      User,
+      UserProfile,
+      RecommendationRules,
+      ScheduledTasks,
+      ActionsLogs,
+    ]),
   ],
   exports: [TypeOrmModule],
 })
