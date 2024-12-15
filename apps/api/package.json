@@ -1,0 +1,14 @@
+{
+  "name": "@emotion-viva/api",
+  "version": "1.0.0",
+  "dependencies": {
+    "@emotion-viva/core": "workspace:*",
+    "@emotion-viva/common": "workspace:*",
+    "@nestjs/common": "^10.0.0"
+  },
+  "scripts": {
+    "dev": "nest start --watch",
+    "build": "nest build",
+    "start:prod": "node dist/main"
+  }
+}

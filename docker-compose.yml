@@ -1,38 +1,27 @@
-version: '3'
+version: '3.8'
 
 services:
-  # NestJS Service
-  backend:
-    build: .
-    container_name: backend
-    ports:
-      - '3000:3000'
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - REDIS_HOST=redis
+      - RABBITMQ_URI=amqp://rabbitmq:5672
     depends_on:
-      - db
+      - mysql
       - redis
       - rabbitmq
 
-  # MySQL Database
-  db:
-    image: mysql:8.0
-    container_name: mysql
+  scraper:
+    build:
+      context: .
+      dockerfile: apps/scraper/Dockerfile
     environment:
-      MYSQL_ROOT_PASSWORD: 121314
-      MYSQL_DATABASE: emotion_viva
-    ports:
-      - '3306:3306'
-
-  # Redis
-  redis:
-    image: redis:alpine
-    container_name: redis
-    ports:
-      - '6379:6379'
-
-  # RabbitMQ
-  rabbitmq:
-    image: rabbitmq:management
-    container_name: rabbitmq
-    ports:
-      - '5672:5672'
-      - '15672:15672'
+      - MONGODB_URI=mongodb://mongodb:27017/scraper
+      - RABBITMQ_URI=amqp://rabbitmq:5672
+    depends_on:
+      - mongodb
+      - rabbitmq
