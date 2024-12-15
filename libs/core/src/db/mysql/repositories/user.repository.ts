@@ -18,4 +18,8 @@ export class UserRepository {
     const user = this.repository.create(data);
     return this.repository.save(user);
   }
+
+  async deleteMany(filter: any): Promise<void> {
+    await this.repository.delete(filter);
+  }
 }

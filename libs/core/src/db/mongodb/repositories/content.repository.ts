@@ -21,4 +21,8 @@ export class ContentRepository {
   async findById(id: string): Promise<Content> {
     return this.model.findById(id).exec();
   }
+
+  async deleteMany(filter: any): Promise<void> {
+    await this.model.deleteMany(filter).exec();
+  }
 }

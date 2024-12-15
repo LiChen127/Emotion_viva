@@ -27,6 +27,14 @@ export class CacheRepository {
     await this.redis.del(key);
   }
 
+  async clear(pattern: string): Promise<void> {
+    await this.redis.del(pattern);
+  }
+
+  async keys(pattern: string): Promise<string[]> {
+    return this.redis.keys(pattern);
+  }
+
   // 添加高级缓存方法
   async getOrSet<T>(
     key: string,

@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { CoreModule } from '../../libs/core/src/core.module';
 import { DataSource } from 'typeorm';
-import { Connection } from 'mongoose';
 import { UserSeeder } from '../../libs/core/src/db/seeds/mysql/user.seed';
 import { ContentSeeder } from '../../libs/core/src/db/seeds/mongo/content.seed';
 import { getModelToken } from '@nestjs/mongoose';

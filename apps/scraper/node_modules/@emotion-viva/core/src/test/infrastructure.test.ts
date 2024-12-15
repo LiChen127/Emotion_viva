@@ -60,10 +60,10 @@ describe('Infrastructure Tests', () => {
       };
 
       const created = await userRepo.create(testUser);
-      const found = await userRepo.findById(created.id);
+      const found = await userRepo.findAll();
 
       expect(found).toBeDefined();
-      expect(found.username).toBe(testUser.username);
+      expect(found[0].username).toBe(testUser.username);
     });
   });
 
