@@ -4,11 +4,7 @@ import { RedisModule } from './redis/redis.module';
 import { MongoDBModule } from './db/mongodb/mongodb.module';
 import { MySQLModule } from './db/mysql/mysql.module';
 import { RabbitMQModule } from './rabbitmq/rabbitmq.module';
-import {
-  databaseConfig,
-  cacheConfig,
-  queueConfig,
-} from './config/configuration';
+import { databaseConfig, cacheConfig, queueConfig } from './config/configuration';
 
 @Global()
 @Module({

@@ -3,38 +3,61 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
+    container_name: emotion_viva_mysql
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: 121314
       MYSQL_DATABASE: emotion_viva
     ports:
-      - '3306:3306'
+      - '3307:3306'
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
 
   mongodb:
     image: mongo:latest
+    container_name: emotion_viva_mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: dev
+      MONGO_INITDB_ROOT_PASSWORD: dev123
+      MONGO_INITDB_DATABASE: emotion_viva
     ports:
       - '27017:27017'
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - app-network
 
   redis:
     image: redis:alpine
+    container_name: emotion_viva_redis
     ports:
       - '6379:6379'
     volumes:
       - redis_data:/data
+    networks:
+      - app-network
 
   rabbitmq:
-    image: rabbitmq:management
+    image: rabbitmq:management-alpine
+    container_name: emotion_viva_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: dev
+      RABBITMQ_DEFAULT_PASS: dev123
     ports:
       - '5672:5672'
       - '15672:15672'
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - app-network
 
 volumes:
   mysql_data:
   mongodb_data:
   redis_data:
   rabbitmq_data:
+
+networks:
+  app-network:
+    driver: bridge
