@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class RabbitMQService {
-  constructor(private readonly client: ClientProxy) { }
+  constructor(@Inject('RABBITMQ_CLIENT') private readonly client: ClientProxy) { }
 
   async publish<T>(pattern: string, data: T): Promise<void> {
-    await this.client.emit(pattern, data).toPromise();
+    await lastValueFrom(this.client.emit(pattern, data));
   }
 
   subscribe<T>(pattern: string, callback: (data: T) => void): void {
