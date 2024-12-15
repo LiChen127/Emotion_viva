@@ -6,17 +6,12 @@ import { CustomLoggerService } from './logger.service';
   providers: [
     {
       provide: CustomLoggerService,
-      useFactory: () => {
-        return new CustomLoggerService({
-          level: 'info',
-          filename: 'app-%DATE%.log',
-          dirname: 'logs',
-          maxFiles: '14',
-          maxSize: '20m'
-        });
-      },
-    },
+      useValue: new CustomLoggerService({
+        level: 'info',
+        filename: 'app-%DATE%.log'
+      })
+    }
   ],
-  exports: [CustomLoggerService],
+  exports: [CustomLoggerService]
 })
 export class LoggerModule { }

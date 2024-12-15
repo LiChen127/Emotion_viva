@@ -1,3 +1,6 @@
+/**
+ * 分发核心libs模块
+ */
 export * from './redis/redis.module';
 export * from './rabbitmq/rabbitmq.module';
 export * from './db/mongodb/mongodb.module';

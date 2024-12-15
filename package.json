@@ -15,12 +15,11 @@
     "test": "pnpm run -r test",
     "clean": "pnpm run -r clean",
     "lint": "pnpm run -r lint",
-    "db:seed": "ts-node scripts/db/seed.ts",
-    "db:init": "ts-node scripts/db/init.ts",
-    "db:migration:create": "typeorm migration:create",
-    "db:migration:generate": "typeorm migration:generate -d libs/core/src/db/migrations/config.ts",
-    "db:migration:run": "typeorm migration:run -d libs/core/src/db/migrations/config.ts",
-    "db:migration:revert": "typeorm migration:revert -d libs/core/src/db/migrations/config.ts"
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:ps": "docker-compose ps",
+    "init:infra": "pnpm --filter @emotion-viva/core run test:infra"
   },
   "dependencies": {
     "@nestjs/core": "^10.0.0",
@@ -35,6 +34,7 @@
     "rimraf": "^5.0.0",
     "ts-node": "^10.0.0",
     "typeorm": "^0.3.0",
-    "@nestjs/typeorm": "^10.0.0"
+    "@nestjs/typeorm": "^10.0.0",
+    "ts-node-dev": "^2.0.0"
   }
 }

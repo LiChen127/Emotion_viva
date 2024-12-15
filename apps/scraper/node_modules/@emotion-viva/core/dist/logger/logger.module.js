@@ -18,18 +18,13 @@ exports.LoggerModule = LoggerModule = __decorate([
         providers: [
             {
                 provide: logger_service_1.CustomLoggerService,
-                useFactory: () => {
-                    return new logger_service_1.CustomLoggerService({
-                        level: 'info',
-                        filename: 'app-%DATE%.log',
-                        dirname: 'logs',
-                        maxFiles: '14',
-                        maxSize: '20m'
-                    });
-                },
-            },
+                useValue: new logger_service_1.CustomLoggerService({
+                    level: 'info',
+                    filename: 'app-%DATE%.log'
+                })
+            }
         ],
-        exports: [logger_service_1.CustomLoggerService],
+        exports: [logger_service_1.CustomLoggerService]
     })
 ], LoggerModule);
 //# sourceMappingURL=logger.module.js.map

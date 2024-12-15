@@ -9,17 +9,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MySQLModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const mysql_core_module_1 = require("./core/mysql.core.module");
-const User_entity_1 = require("./entities/User.entity");
-const user_repository_1 = require("./repositories/user.repository");
+const config_1 = require("@nestjs/config");
 let MySQLModule = class MySQLModule {
 };
 exports.MySQLModule = MySQLModule;
 exports.MySQLModule = MySQLModule = __decorate([
     (0, common_1.Module)({
-        imports: [mysql_core_module_1.MySQLCoreModule, typeorm_1.TypeOrmModule.forFeature([User_entity_1.User])],
-        providers: [user_repository_1.UserRepository],
-        exports: [user_repository_1.UserRepository],
+        imports: [
+            typeorm_1.TypeOrmModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                useFactory: (configService) => ({
+                    type: 'mysql',
+                    host: configService.get('MYSQL_HOST'),
+                    port: configService.get('MYSQL_PORT'),
+                    username: configService.get('MYSQL_USER'),
+                    password: configService.get('MYSQL_PASSWORD'),
+                    database: configService.get('MYSQL_DATABASE'),
+                    driver: require('mysql2'),
+                    synchronize: false,
+                    autoLoadEntities: true,
+                    poolSize: configService.get('MYSQL_POOL_MAX'),
+                }),
+                inject: [config_1.ConfigService],
+            }),
+        ],
     })
 ], MySQLModule);
 //# sourceMappingURL=mysql.module.js.map

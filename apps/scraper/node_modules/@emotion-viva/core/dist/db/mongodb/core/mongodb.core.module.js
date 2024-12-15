@@ -9,12 +9,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MongoDBCoreModule = void 0;
 const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
+const config_1 = require("@nestjs/config");
 let MongoDBCoreModule = class MongoDBCoreModule {
 };
 exports.MongoDBCoreModule = MongoDBCoreModule;
 exports.MongoDBCoreModule = MongoDBCoreModule = __decorate([
     (0, common_1.Module)({
-        imports: [mongoose_1.MongooseModule.forRoot(process.env.MONGO_URI)],
+        imports: [
+            mongoose_1.MongooseModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                useFactory: async (configService) => ({
+                    uri: configService.get('MONGODB_URI'),
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true,
+                }),
+                inject: [config_1.ConfigService],
+            }),
+        ],
+        exports: [mongoose_1.MongooseModule],
     })
 ], MongoDBCoreModule);
 //# sourceMappingURL=mongodb.core.module.js.map

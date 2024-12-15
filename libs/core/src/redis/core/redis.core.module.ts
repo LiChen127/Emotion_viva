@@ -1,24 +1,16 @@
+// redis.core.module.ts
 import { Module } from '@nestjs/common';
-import { RedisClient } from '../clients/redis.client';
-import { CustomLoggerService } from '../../logger/logger.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
+  imports: [ConfigModule],
   providers: [
-    CustomLoggerService,
     {
       provide: 'REDIS_CLIENT',
-      useFactory: (logger: CustomLoggerService) => {
-        return new RedisClient(
-          {
-            host: process.env.REDIS_HOST,
-            port: parseInt(process.env.REDIS_PORT, 10),
-            retryStrategy: (times) => Math.min(times * 50, 2000),
-            maxRetriesPerRequest: 3,
-          },
-          logger, // 注入 Logger
-        );
+      useFactory: async (configService: ConfigService) => {
+        // Redis 配置逻辑
       },
-      inject: [CustomLoggerService], // 通过 NestJS 注入 CustomLoggerService
+      inject: [ConfigService],
     },
   ],
   exports: ['REDIS_CLIENT'],

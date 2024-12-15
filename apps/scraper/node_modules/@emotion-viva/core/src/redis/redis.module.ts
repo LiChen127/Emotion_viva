@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { RedisCoreModule } from './core/redis.core.module';
-import { CacheRepository } from './repositories/cache.repository';
+import { CacheRepository } from './repositories/redis.repository';
 
 @Module({
   imports: [RedisCoreModule],

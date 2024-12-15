@@ -1,27 +1,52 @@
 version: '3.8'
 
 services:
-  api:
-    build:
-      context: .
-      dockerfile: apps/api/Dockerfile
-    environment:
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - REDIS_HOST=redis
-      - RABBITMQ_URI=amqp://rabbitmq:5672
-    depends_on:
-      - mysql
-      - redis
-      - rabbitmq
+  mongodb:
+    image: mongo:latest
+    container_name: emotion_viva_mongodb
+    ports:
+      - '27018:27017'
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - emotion_viva_network
 
-  scraper:
-    build:
-      context: .
-      dockerfile: apps/scraper/Dockerfile
+  mysql:
+    image: mysql:8.0
+    container_name: emotion_viva_mysql
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/scraper
-      - RABBITMQ_URI=amqp://rabbitmq:5672
-    depends_on:
-      - mongodb
-      - rabbitmq
+      MYSQL_ROOT_PASSWORD: 121314
+      MYSQL_DATABASE: emotion_viva
+      MYSQL_ROOT_HOST: '%'
+    ports:
+      - '3307:3306'
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - emotion_viva_network
+
+  redis:
+    image: redis:latest
+    container_name: emotion_viva_redis
+    ports:
+      - '6379:6379'
+    networks:
+      - emotion_viva_network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: emotion_viva_rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - emotion_viva_network
+
+networks:
+  emotion_viva_network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  mysql_data:

@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const config_1 = require("@nestjs/config");
 const path = require("path");
+const dotenv = require("dotenv");
+dotenv.config();
 const configService = new config_1.ConfigService();
 exports.default = new typeorm_1.DataSource({
     type: 'mysql',
