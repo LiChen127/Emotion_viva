@@ -4,6 +4,7 @@ import { RedisModule } from './redis/redis.module';
 import { MongoDBModule } from './db/mongodb/mongodb.module';
 import { MySQLModule } from './db/mysql/mysql.module';
 import { RabbitMQModule } from './rabbitmq/rabbitmq.module';
+import { LoggerModule } from './logger/logger.module';
 import { databaseConfig, cacheConfig, queueConfig } from './config/configuration';
 
 @Global()
@@ -17,7 +18,8 @@ import { databaseConfig, cacheConfig, queueConfig } from './config/configuration
     MongoDBModule,
     RedisModule,
     RabbitMQModule,
+    LoggerModule,
   ],
-  exports: [MySQLModule, MongoDBModule, RedisModule, RabbitMQModule],
+  exports: [MySQLModule, MongoDBModule, RedisModule, RabbitMQModule, LoggerModule],
 })
 export class CoreModule { }

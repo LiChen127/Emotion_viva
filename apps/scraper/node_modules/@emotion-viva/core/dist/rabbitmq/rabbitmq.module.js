@@ -10,14 +10,15 @@ exports.RabbitMQModule = void 0;
 const common_1 = require("@nestjs/common");
 const rabbitmq_core_modules_1 = require("./core/rabbitmq.core.modules");
 const message_respositories_1 = require("./repositories/message.respositories");
+const rabbitmq_service_1 = require("./rabbitmq.service");
 let RabbitMQModule = class RabbitMQModule {
 };
 exports.RabbitMQModule = RabbitMQModule;
 exports.RabbitMQModule = RabbitMQModule = __decorate([
     (0, common_1.Module)({
         imports: [rabbitmq_core_modules_1.RabbitMQCoreModule],
-        providers: [message_respositories_1.MessageRepository],
-        exports: [message_respositories_1.MessageRepository],
+        providers: [message_respositories_1.MessageRepository, rabbitmq_service_1.RabbitMQService],
+        exports: [message_respositories_1.MessageRepository, rabbitmq_service_1.RabbitMQService],
     })
 ], RabbitMQModule);
 //# sourceMappingURL=rabbitmq.module.js.map
