@@ -13,6 +13,7 @@ const redis_module_1 = require("./redis/redis.module");
 const mongodb_module_1 = require("./db/mongodb/mongodb.module");
 const mysql_module_1 = require("./db/mysql/mysql.module");
 const rabbitmq_module_1 = require("./rabbitmq/rabbitmq.module");
+const logger_module_1 = require("./logger/logger.module");
 const configuration_1 = require("./config/configuration");
 let CoreModule = class CoreModule {
 };
@@ -29,8 +30,9 @@ exports.CoreModule = CoreModule = __decorate([
             mongodb_module_1.MongoDBModule,
             redis_module_1.RedisModule,
             rabbitmq_module_1.RabbitMQModule,
+            logger_module_1.LoggerModule,
         ],
-        exports: [mysql_module_1.MySQLModule, mongodb_module_1.MongoDBModule, redis_module_1.RedisModule, rabbitmq_module_1.RabbitMQModule],
+        exports: [mysql_module_1.MySQLModule, mongodb_module_1.MongoDBModule, redis_module_1.RedisModule, rabbitmq_module_1.RabbitMQModule, logger_module_1.LoggerModule],
     })
 ], CoreModule);
 //# sourceMappingURL=core.module.js.map

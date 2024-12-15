@@ -5,9 +5,14 @@ import * as DailyRotateFile from 'winston-daily-rotate-file';
 
 @Injectable()
 export class CustomLoggerService implements LoggerService, ILogger {
-  private readonly logger: winston.Logger;
+  private logger: winston.Logger;
   private context?: string;
+
   constructor(config?: LoggerConfig) {
+    this.initLogger(config || { level: 'info' });
+  }
+
+  private initLogger(config: LoggerConfig) {
     const { combine, timestamp, printf, colorize } = winston.format;
 
     const logFormat = printf(
@@ -48,12 +53,16 @@ export class CustomLoggerService implements LoggerService, ILogger {
     return this;
   }
 
-  log(context: string, message: string, meta: Record<string, any> = {}) {
-    this.logger.info(message, { context, ...meta });
+  log(message: any, context?: string) {
+    context = context || this.context;
+    this.info(context, message);
   }
 
   info(context: string, message: string, meta: Record<string, any> = {}) {
-    this.logger.info(message, { context, ...meta });
+    if (!this.logger) {
+      this.initLogger({ level: 'info' });
+    }
+    this.logger.info(message, { context: context || this.context, ...meta });
   }
 
   error(
@@ -62,18 +71,30 @@ export class CustomLoggerService implements LoggerService, ILogger {
     trace?: string,
     meta: Record<string, any> = {},
   ) {
-    this.logger.error(message, { context, trace, ...meta });
+    if (!this.logger) {
+      this.initLogger({ level: 'info' });
+    }
+    this.logger.error(message, { context: context || this.context, trace, ...meta });
   }
 
   warn(context: string, message: string, meta: Record<string, any> = {}) {
-    this.logger.warn(message, { context, ...meta });
+    if (!this.logger) {
+      this.initLogger({ level: 'info' });
+    }
+    this.logger.warn(message, { context: context || this.context, ...meta });
   }
 
   debug(context: string, message: string, meta: Record<string, any> = {}) {
-    this.logger.debug(message, { context, ...meta });
+    if (!this.logger) {
+      this.initLogger({ level: 'info' });
+    }
+    this.logger.debug(message, { context: context || this.context, ...meta });
   }
 
   verbose(context: string, message: string, meta: Record<string, any> = {}) {
-    this.logger.verbose(message, { context, ...meta });
+    if (!this.logger) {
+      this.initLogger({ level: 'info' });
+    }
+    this.logger.verbose(message, { context: context || this.context, ...meta });
   }
 }

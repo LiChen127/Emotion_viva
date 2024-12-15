@@ -19,4 +19,7 @@ __exportStar(require("./rabbitmq/rabbitmq.module"), exports);
 __exportStar(require("./db/mongodb/mongodb.module"), exports);
 __exportStar(require("./db/mysql/mysql.module"), exports);
 __exportStar(require("./config/env.config"), exports);
+__exportStar(require("./logger/logger.module"), exports);
+__exportStar(require("./logger/logger.service"), exports);
+__exportStar(require("./logger/interfaces/logger.interfaces"), exports);
 //# sourceMappingURL=index.js.map
