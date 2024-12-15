@@ -1,100 +1,105 @@
 import { Injectable, LoggerService } from '@nestjs/common';
 import * as winston from 'winston';
-import { ILogger, LoggerConfig } from './interfaces/logger.interfaces';
 import * as DailyRotateFile from 'winston-daily-rotate-file';
 
+export interface LoggerConfig {
+  level?: string;
+  filename?: string;
+  dirname?: string;
+  maxFiles?: string;
+  maxSize?: string;
+}
+
 @Injectable()
-export class CustomLoggerService implements LoggerService, ILogger {
+export class CustomLoggerService implements LoggerService {
   private logger: winston.Logger;
-  private context?: string;
+  private context: string = 'Application';
 
   constructor(config?: LoggerConfig) {
-    this.initLogger(config || { level: 'info' });
+    this.initializeLogger(config);
   }
 
-  private initLogger(config: LoggerConfig) {
+  private initializeLogger(config?: LoggerConfig) {
     const { combine, timestamp, printf, colorize } = winston.format;
 
-    const logFormat = printf(
-      ({ level, message, timestamp, context, trace, ...meta }) => {
-        return `${timestamp} [${level}] [${context || 'Application'}]: ${message}${trace ? `\n${trace}` : ''
-          }${Object.keys(meta).length ? `\n${JSON.stringify(meta, null, 2)}` : ''}`;
-      },
-    );
+    // 自定义日志格式
+    const logFormat = printf(({ level, message, timestamp, context, trace, ...meta }) => {
+      return `${timestamp} [${level}] [${context}]: ${message}${trace ? `\n${trace}` : ''
+        }${Object.keys(meta).length ? `\n${JSON.stringify(meta, null, 2)}` : ''}`;
+    });
 
+    // 基础配置
+    const defaultConfig: LoggerConfig = {
+      level: 'info',
+      dirname: 'logs',
+      maxFiles: '14d',
+      maxSize: '20m'
+    };
+
+    const finalConfig = { ...defaultConfig, ...config };
+
+    // 配置传输器
     const transports: winston.transport[] = [
       new winston.transports.Console({
-        format: combine(colorize(), timestamp(), logFormat),
-      }),
+        format: combine(colorize(), timestamp(), logFormat)
+      })
     ];
 
-    if (config?.filename) {
+    // 如果配置了文件存储,添加文件传输器
+    if (finalConfig.filename) {
       transports.push(
         new DailyRotateFile({
-          filename: config.filename,
-          dirname: config.dirname || 'logs',
+          filename: finalConfig.filename,
+          dirname: finalConfig.dirname,
           datePattern: 'YYYY-MM-DD',
-          maxFiles: config.maxFiles || '14d',
-          maxSize: config.maxSize || '20m',
-          format: combine(timestamp(), logFormat),
-        }),
+          maxFiles: finalConfig.maxFiles,
+          maxSize: finalConfig.maxSize,
+          format: combine(timestamp(), logFormat)
+        })
       );
     }
 
+    // 创建 logger 实例
     this.logger = winston.createLogger({
-      level: config?.level || 'info',
+      level: finalConfig.level,
       format: combine(timestamp(), logFormat),
-      transports,
+      transports
     });
   }
 
-  setContext(context: string) {
+  setContext(context: string): this {
     this.context = context;
     return this;
   }
 
-  log(message: any, context?: string) {
-    context = context || this.context;
-    this.info(context, message);
+  log(message: any, context?: string): void {
+    this.logger.info(message, { context: context || this.context });
   }
 
-  info(context: string, message: string, meta: Record<string, any> = {}) {
-    if (!this.logger) {
-      this.initLogger({ level: 'info' });
-    }
-    this.logger.info(message, { context: context || this.context, ...meta });
+  error(message: any, trace?: string, context?: string): void {
+    this.logger.error(message, {
+      context: context || this.context,
+      trace
+    });
   }
 
-  error(
-    context: string,
-    message: string,
-    trace?: string,
-    meta: Record<string, any> = {},
-  ) {
-    if (!this.logger) {
-      this.initLogger({ level: 'info' });
-    }
-    this.logger.error(message, { context: context || this.context, trace, ...meta });
+  warn(message: any, context?: string): void {
+    this.logger.warn(message, { context: context || this.context });
   }
 
-  warn(context: string, message: string, meta: Record<string, any> = {}) {
-    if (!this.logger) {
-      this.initLogger({ level: 'info' });
-    }
-    this.logger.warn(message, { context: context || this.context, ...meta });
+  debug(message: any, context?: string): void {
+    this.logger.debug(message, { context: context || this.context });
   }
 
-  debug(context: string, message: string, meta: Record<string, any> = {}) {
-    if (!this.logger) {
-      this.initLogger({ level: 'info' });
-    }
-    this.logger.debug(message, { context: context || this.context, ...meta });
+  verbose(message: any, context?: string): void {
+    this.logger.verbose(message, { context: context || this.context });
   }
 
-  verbose(context: string, message: string, meta: Record<string, any> = {}) {
-    if (!this.logger) {
-      this.initLogger({ level: 'info' });
-    }
-    this.logger.verbose(message, { context: context || this.context, ...meta });
+  // 扩展方法 - 带元数据的日志
+  logWithMeta(level: string, message: string, meta: Record<string, any> = {}, context?: string): void {
+    this.logger.log(level, message, {
+      context: context || this.context,
+      ...meta
+    });
   }
 }

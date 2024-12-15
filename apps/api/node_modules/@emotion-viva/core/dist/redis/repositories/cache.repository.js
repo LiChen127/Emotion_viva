@@ -35,11 +35,14 @@ let CacheRepository = class CacheRepository {
     async delete(key) {
         await this.redis.del(key);
     }
-    async clear(pattern) {
-        await this.redis.del(pattern);
-    }
     async keys(pattern) {
         return this.redis.keys(pattern);
+    }
+    async clear(pattern) {
+        const keys = await this.keys(pattern);
+        if (keys.length > 0) {
+            await this.redis.del(...keys);
+        }
     }
     async getOrSet(key, factory, ttl) {
         const cached = await this.get(key);

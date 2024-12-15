@@ -1,14 +1,21 @@
 import { LoggerService } from '@nestjs/common';
-import { ILogger, LoggerConfig } from './interfaces/logger.interfaces';
-export declare class CustomLoggerService implements LoggerService, ILogger {
-    private readonly logger;
-    private context?;
+export interface LoggerConfig {
+    level?: string;
+    filename?: string;
+    dirname?: string;
+    maxFiles?: string;
+    maxSize?: string;
+}
+export declare class CustomLoggerService implements LoggerService {
+    private logger;
+    private context;
     constructor(config?: LoggerConfig);
+    private initializeLogger;
     setContext(context: string): this;
-    log(context: string, message: string, meta?: Record<string, any>): void;
-    info(context: string, message: string, meta?: Record<string, any>): void;
-    error(context: string, message: string, trace?: string, meta?: Record<string, any>): void;
-    warn(context: string, message: string, meta?: Record<string, any>): void;
-    debug(context: string, message: string, meta?: Record<string, any>): void;
-    verbose(context: string, message: string, meta?: Record<string, any>): void;
+    log(message: any, context?: string): void;
+    error(message: any, trace?: string, context?: string): void;
+    warn(message: any, context?: string): void;
+    debug(message: any, context?: string): void;
+    verbose(message: any, context?: string): void;
+    logWithMeta(level: string, message: string, meta?: Record<string, any>, context?: string): void;
 }

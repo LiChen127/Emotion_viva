@@ -23,7 +23,7 @@ exports.LoggerModule = LoggerModule = __decorate([
                         level: 'info',
                         filename: 'app-%DATE%.log',
                         dirname: 'logs',
-                        maxFiles: 14,
+                        maxFiles: '14',
                         maxSize: '20m'
                     });
                 },

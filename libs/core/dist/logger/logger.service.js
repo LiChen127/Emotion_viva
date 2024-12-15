@@ -15,52 +15,69 @@ const winston = require("winston");
 const DailyRotateFile = require("winston-daily-rotate-file");
 let CustomLoggerService = class CustomLoggerService {
     constructor(config) {
+        this.context = 'Application';
+        this.initializeLogger(config);
+    }
+    initializeLogger(config) {
         const { combine, timestamp, printf, colorize } = winston.format;
         const logFormat = printf(({ level, message, timestamp, context, trace, ...meta }) => {
-            return `${timestamp} [${level}] [${context || 'Application'}]: ${message}${trace ? `\n${trace}` : ''}${Object.keys(meta).length ? `\n${JSON.stringify(meta, null, 2)}` : ''}`;
+            return `${timestamp} [${level}] [${context}]: ${message}${trace ? `\n${trace}` : ''}${Object.keys(meta).length ? `\n${JSON.stringify(meta, null, 2)}` : ''}`;
         });
+        const defaultConfig = {
+            level: 'info',
+            dirname: 'logs',
+            maxFiles: '14d',
+            maxSize: '20m'
+        };
+        const finalConfig = { ...defaultConfig, ...config };
         const transports = [
             new winston.transports.Console({
-                format: combine(colorize(), timestamp(), logFormat),
-            }),
+                format: combine(colorize(), timestamp(), logFormat)
+            })
         ];
-        if (config?.filename) {
+        if (finalConfig.filename) {
             transports.push(new DailyRotateFile({
-                filename: config.filename,
-                dirname: config.dirname || 'logs',
+                filename: finalConfig.filename,
+                dirname: finalConfig.dirname,
                 datePattern: 'YYYY-MM-DD',
-                maxFiles: config.maxFiles || '14d',
-                maxSize: config.maxSize || '20m',
-                format: combine(timestamp(), logFormat),
+                maxFiles: finalConfig.maxFiles,
+                maxSize: finalConfig.maxSize,
+                format: combine(timestamp(), logFormat)
             }));
         }
         this.logger = winston.createLogger({
-            level: config?.level || 'info',
+            level: finalConfig.level,
             format: combine(timestamp(), logFormat),
-            transports,
+            transports
         });
     }
     setContext(context) {
         this.context = context;
         return this;
     }
-    log(context, message, meta = {}) {
-        this.logger.info(message, { context, ...meta });
+    log(message, context) {
+        this.logger.info(message, { context: context || this.context });
     }
-    info(context, message, meta = {}) {
-        this.logger.info(message, { context, ...meta });
+    error(message, trace, context) {
+        this.logger.error(message, {
+            context: context || this.context,
+            trace
+        });
     }
-    error(context, message, trace, meta = {}) {
-        this.logger.error(message, { context, trace, ...meta });
+    warn(message, context) {
+        this.logger.warn(message, { context: context || this.context });
     }
-    warn(context, message, meta = {}) {
-        this.logger.warn(message, { context, ...meta });
+    debug(message, context) {
+        this.logger.debug(message, { context: context || this.context });
     }
-    debug(context, message, meta = {}) {
-        this.logger.debug(message, { context, ...meta });
+    verbose(message, context) {
+        this.logger.verbose(message, { context: context || this.context });
     }
-    verbose(context, message, meta = {}) {
-        this.logger.verbose(message, { context, ...meta });
+    logWithMeta(level, message, meta = {}, context) {
+        this.logger.log(level, message, {
+            context: context || this.context,
+            ...meta
+        });
     }
 };
 exports.CustomLoggerService = CustomLoggerService;

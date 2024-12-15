@@ -1,7 +1,3 @@
-/**
- * 定义 Redis 缓存仓库，定义缓存操作API
- */
-
 import { Injectable, Inject } from '@nestjs/common';
 import { RedisClient } from '../clients/redis.client';
 
@@ -27,20 +23,18 @@ export class CacheRepository {
     await this.redis.del(key);
   }
 
-  async clear(pattern: string): Promise<void> {
-    await this.redis.del(pattern);
-  }
-
   async keys(pattern: string): Promise<string[]> {
     return this.redis.keys(pattern);
   }
 
-  // 添加高级缓存方法
-  async getOrSet<T>(
-    key: string,
-    factory: () => Promise<T>,
-    ttl?: number,
-  ): Promise<T> {
+  async clear(pattern: string): Promise<void> {
+    const keys = await this.keys(pattern);
+    if (keys.length > 0) {
+      await this.redis.del(...keys);
+    }
+  }
+
+  async getOrSet<T>(key: string, factory: () => Promise<T>, ttl?: number): Promise<T> {
     const cached = await this.get<T>(key);
     if (cached) return cached;
 
