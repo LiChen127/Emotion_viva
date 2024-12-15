@@ -10,15 +10,24 @@
     "dev:api": "pnpm --filter @emotion-viva/api dev",
     "dev:scraper": "pnpm --filter @emotion-viva/scraper dev",
     "build": "pnpm run -r build",
-    "build:libs": "pnpm run --filter \"@emotion-viva/core\" build && pnpm run --filter \"@emotion-viva/common\" build",
-    "build:apps": "pnpm run --filter \"@emotion-viva/api\" build && pnpm run --filter \"@emotion-viva/scraper\" build",
+    "build:libs": "pnpm run --filter \"@emotion-viva/core\" build",
+    "build:apps": "pnpm run --filter \"./apps/*\" build",
     "test": "pnpm run -r test",
     "clean": "pnpm run -r clean",
-    "lint": "pnpm run -r lint"
+    "lint": "pnpm run -r lint",
+    "db:seed": "ts-node scripts/db/seed.ts",
+    "db:init": "ts-node scripts/db/init.ts",
+    "db:migration:create": "typeorm migration:create",
+    "db:migration:generate": "typeorm migration:generate -d libs/core/src/db/migrations/config.ts",
+    "db:migration:run": "typeorm migration:run -d libs/core/src/db/migrations/config.ts",
+    "db:migration:revert": "typeorm migration:revert -d libs/core/src/db/migrations/config.ts"
   },
   "devDependencies": {
     "@types/node": "^18.0.0",
     "typescript": "^5.0.0",
-    "rimraf": "^5.0.0"
+    "rimraf": "^5.0.0",
+    "ts-node": "^10.0.0",
+    "typeorm": "^0.3.0",
+    "@nestjs/typeorm": "^10.0.0"
   }
 }
