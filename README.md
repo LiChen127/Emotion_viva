@@ -1,69 +1,35 @@
-# Emotion Viva
+# Emotion_viva_backend
 
-## 项目介绍
+## Emotion_viva 是一个心理健康服务平台，提供心理情感推送、树洞社区、个人成长、情绪管理等功能的集成平台
 
-Emotion Viva 是一个基于 NestJS 的微服务架构项目，专注于情感分析、情绪树洞和情感识别。项目采用 monorepo 结构，使用 pnpm 作为包管理工具。
+## 项目功能设计
 
-## 技术栈
+### C 端 CMS 内容管理
 
-- **框架**: NestJS
-- **数据库**:
-  - MySQL: 用户数据、系统配置
-  - MongoDB: 内容数据、日志
-  - Redis: 缓存
-- **消息队列**: RabbitMQ
-- **包管理**: pnpm
-- **容器化**: Docker
+1. 内容管理
 
-## 项目结构
+- 内容审核
+- 内容编辑
+- 内容发布
+- 内容删除
+- 内容推荐
+- 内容排序
+- 内容统计
 
-emotion_viva/
-├── apps/ # 应用服务
-│ ├── api/ # 主 API 服务
-│ │ └── src/
-│ └── scraper/ # 爬虫服务
-│ └── src/
-├── libs/ # 共享库
-│ ├── core/ # 核心基础设施
-│ │ ├── src/
-│ │ │ ├── db/ # 数据库连接
-│ │ │ ├── cache/ # 缓存
-│ │ │ └── queue/ # 消息队列
-│ │ └── package.json
-│ └── common/ # 通用功能
-│ └── src/
-├── scripts/ # 工具脚本
-│ └── db/ # 数据库相关脚本
-└── docker-compose.dev.yml # 开发环境配置
+2. 用户管理
 
-## 开发环境设置
+- 用户信息管理
+- 用户评论管理
+- 用户行为与数据分析
+- 用户权限管理
 
-1. **安装依赖**
+3. 数据分析
 
-```bash
-pnpm install
-```
+- 全平台内容数据分析
+- 用户行为数据分析
 
-2. **环境配置**
+### B 端
 
-```bash
-cp .env.example .env
-```
-
-3. **启动开发环境**
-
-```bash
-pnpm dev
-```
-
-4. **启动 Docker**
-
-```bash
-docker compose -f docker-compose.dev.yml up -d
-```
-
-5. **初始化数据库**
-
-```bash
-pnpm run db:init
-```
+1. 内容推送模块
+2. 树洞社区模块
+3. 个人成长模块
